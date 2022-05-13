@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         };
 
         // Update the cache with the event.
-        cache.update(&event);
+        cache.update(event.clone());
     }
 
     Ok(())

@@ -155,7 +155,7 @@ async fn main() -> anyhow::Result<()> {
         };
 
         // Update the cache with the event.
-        cache.update(&event);
+        cache.update(event.clone());
 
         tokio::spawn(handle_event(event, Arc::clone(&http)));
     }

@@ -59,7 +59,6 @@ pub use self::{
     vanity_url::VanityUrl, verification_level::VerificationLevel, widget::GuildWidget,
     scheduled_event::GuildScheduledEvent
 };
-use serde_json::Value;
 
 use super::gateway::presence::PresenceListDeserializer;
 use crate::{

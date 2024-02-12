@@ -57,8 +57,9 @@ pub use self::{
     prune::GuildPrune, role::Role, role_flags::RoleFlags, role_tags::RoleTags,
     system_channel_flags::SystemChannelFlags, unavailable_guild::UnavailableGuild,
     vanity_url::VanityUrl, verification_level::VerificationLevel, widget::GuildWidget,
-    serde_json::Value
+    scheduled_event::GuildScheduledEvent
 };
+use serde_json::Value;
 
 use super::gateway::presence::PresenceListDeserializer;
 use crate::{
@@ -151,9 +152,7 @@ pub struct Guild {
     pub voice_states: Vec<VoiceState>,
     pub widget_channel_id: Option<Id<ChannelMarker>>,
     pub widget_enabled: Option<bool>,
-
-    #[serde(flatten)]
-    pub extra_info: std::collections::HashMap<String, Value>,
+    pub guild_scheduled_events: GuildScheduledEvent
 }
 
 impl<'de> Deserialize<'de> for Guild {
@@ -211,6 +210,7 @@ impl<'de> Deserialize<'de> for Guild {
             VanityUrlCode,
             WidgetChannelId,
             WidgetEnabled,
+            GuildScheduledEvent,
         }
 
         struct GuildVisitor;
@@ -273,6 +273,7 @@ impl<'de> Deserialize<'de> for Guild {
                 let mut vanity_url_code = None::<Option<_>>;
                 let mut widget_channel_id = None::<Option<_>>;
                 let mut widget_enabled = None::<Option<_>>;
+                let mut guild_scheduled_events = None::<Option<_>>;
 
                 loop {
                     let key = match map.next_key() {
@@ -634,6 +635,13 @@ impl<'de> Deserialize<'de> for Guild {
                             }
 
                             widget_enabled = Some(map.next_value()?);
+                        },
+                        Field::GuildScheduledEvent => {
+                            if guild_scheduled_events.is_some() {
+                                return Err(DeError::duplicate_field("guild_scheduled_events"));
+                            }
+
+                            guild_scheduled_events = Some(map.next_value()?);
                         }
                     }
                 }
@@ -695,6 +703,7 @@ impl<'de> Deserialize<'de> for Guild {
                 let mut voice_states = voice_states.unwrap_or_default();
                 let widget_channel_id = widget_channel_id.unwrap_or_default();
                 let widget_enabled = widget_enabled.unwrap_or_default();
+                let guild_scheduled_events = guild_scheduled_events.unwrap_or_default();
 
                 for channel in &mut channels {
                     channel.guild_id = Some(id);
@@ -762,6 +771,7 @@ impl<'de> Deserialize<'de> for Guild {
                     voice_states,
                     widget_channel_id,
                     widget_enabled,
+                    guild_scheduled_events
                 })
             }
         }
@@ -813,6 +823,7 @@ impl<'de> Deserialize<'de> for Guild {
             "vanity_url_code",
             "widget_channel_id",
             "widget_enabled",
+            "guild_scheduled_events"
         ];
 
         deserializer.deserialize_struct("Guild", FIELDS, GuildVisitor)

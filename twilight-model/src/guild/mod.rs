@@ -57,6 +57,7 @@ pub use self::{
     prune::GuildPrune, role::Role, role_flags::RoleFlags, role_tags::RoleTags,
     system_channel_flags::SystemChannelFlags, unavailable_guild::UnavailableGuild,
     vanity_url::VanityUrl, verification_level::VerificationLevel, widget::GuildWidget,
+    serde_json::Value
 };
 
 use super::gateway::presence::PresenceListDeserializer;
@@ -136,9 +137,7 @@ pub struct Guild {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub safety_alerts_channel_id: Option<Id<ChannelMarker>>,
     pub splash: Option<ImageHash>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub stage_instances: Vec<StageInstance>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub stickers: Vec<Sticker>,
     pub system_channel_flags: SystemChannelFlags,
     pub system_channel_id: Option<Id<ChannelMarker>>,
@@ -150,10 +149,11 @@ pub struct Guild {
     pub verification_level: VerificationLevel,
     #[serde(default)]
     pub voice_states: Vec<VoiceState>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub widget_channel_id: Option<Id<ChannelMarker>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub widget_enabled: Option<bool>,
+
+    #[serde(flatten)]
+    pub extra_info: std::collections::HashMap<String, Value>,
 }
 
 impl<'de> Deserialize<'de> for Guild {

@@ -64,6 +64,7 @@ impl InMemoryCache {
             voice_states,
             widget_channel_id,
             widget_enabled,
+            guild_scheduled_events,
         } = guild;
 
         // The map and set creation needs to occur first, so caching states and
@@ -172,6 +173,7 @@ impl InMemoryCache {
                 verification_level,
                 widget_channel_id,
                 widget_enabled,
+                guild_scheduled_events,
             };
 
             self.unavailable_guilds.remove(&guild.id());
@@ -286,6 +288,10 @@ impl UpdateCache for GuildUpdate {
             guild.vanity_url_code = self.0.vanity_url_code;
             guild.widget_channel_id = self.0.widget_channel_id;
             guild.widget_enabled = self.0.widget_enabled;
+
+            if let Some(gse) = self.0.guild_scheduled_events {
+                guild.guild_scheduled_events = gse;
+            }
         };
     }
 }
@@ -456,6 +462,7 @@ mod tests {
             vanity_url_code: None,
             verification_level: VerificationLevel::VeryHigh,
             voice_states: Vec::new(),
+            guild_scheduled_events: Vec::new(),
             widget_channel_id: None,
             widget_enabled: None,
         };

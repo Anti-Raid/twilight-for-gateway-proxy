@@ -151,7 +151,7 @@ pub struct Guild {
     pub voice_states: Vec<VoiceState>,
     pub widget_channel_id: Option<Id<ChannelMarker>>,
     pub widget_enabled: Option<bool>,
-    pub guild_scheduled_events: GuildScheduledEvent
+    pub guild_scheduled_events: Vec<GuildScheduledEvent>
 }
 
 impl<'de> Deserialize<'de> for Guild {
@@ -272,7 +272,7 @@ impl<'de> Deserialize<'de> for Guild {
                 let mut vanity_url_code = None::<Option<_>>;
                 let mut widget_channel_id = None::<Option<_>>;
                 let mut widget_enabled = None::<Option<_>>;
-                let mut guild_scheduled_events = None::<Option<_>>;
+                let mut guild_scheduled_events = None::<Vec<_>>;
 
                 loop {
                     let key = match map.next_key() {

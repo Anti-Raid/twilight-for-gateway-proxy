@@ -1,6 +1,7 @@
 use super::{
     AfkTimeout, DefaultMessageNotificationLevel, Emoji, ExplicitContentFilter, GuildFeature,
     MfaLevel, NSFWLevel, Permissions, PremiumTier, Role, SystemChannelFlags, VerificationLevel,
+    GuildScheduledEvent
 };
 use crate::{
     id::{
@@ -59,6 +60,7 @@ pub struct PartialGuild {
     pub widget_channel_id: Option<Id<ChannelMarker>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub widget_enabled: Option<bool>,
+    pub guild_scheduled_events: Option<Vec<GuildScheduledEvent>>,
 }
 
 #[cfg(test)]

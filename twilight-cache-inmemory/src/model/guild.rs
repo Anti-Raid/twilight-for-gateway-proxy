@@ -4,7 +4,7 @@ use serde::Serialize;
 use twilight_model::{
     guild::{
         AfkTimeout, DefaultMessageNotificationLevel, ExplicitContentFilter, GuildFeature, MfaLevel,
-        NSFWLevel, Permissions, PremiumTier, SystemChannelFlags, VerificationLevel,
+        NSFWLevel, Permissions, PremiumTier, SystemChannelFlags, VerificationLevel, scheduled_event::GuildScheduledEvent
     },
     id::{
         marker::{ApplicationMarker, ChannelMarker, GuildMarker, UserMarker},
@@ -56,6 +56,7 @@ pub struct CachedGuild {
     pub(crate) verification_level: VerificationLevel,
     pub(crate) widget_channel_id: Option<Id<ChannelMarker>>,
     pub(crate) widget_enabled: Option<bool>,
+    pub(crate) guild_scheduled_events: Vec<GuildScheduledEvent>,
 }
 
 impl CachedGuild {

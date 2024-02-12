@@ -274,6 +274,11 @@ impl CachedGuild {
     pub const fn widget_enabled(&self) -> Option<bool> {
         self.widget_enabled
     }
+
+    /// Scheduled events for the guild.
+    pub fn guild_scheduled_events(&self) -> Vec<GuildScheduledEvent> {
+        self.guild_scheduled_events.clone()
+    }
 }
 
 pub struct Features<'a> {

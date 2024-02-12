@@ -898,6 +898,7 @@ mod tests {
             voice_states: Vec::new(),
             widget_channel_id: Some(Id::new(8)),
             widget_enabled: Some(true),
+            guild_scheduled_events: Vec::new(),
         };
 
         serde_test::assert_tokens(
@@ -1042,6 +1043,10 @@ mod tests {
                 Token::Str("widget_enabled"),
                 Token::Some,
                 Token::Bool(true),
+                Token::Str("guild_scheduled_events"),
+                Token::Seq { len: Some(0) },
+                Token::SeqEnd,
+                Token::Some,
                 Token::StructEnd,
             ],
         );
